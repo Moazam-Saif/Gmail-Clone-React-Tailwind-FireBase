@@ -1,13 +1,17 @@
 
 import { MdCropSquare } from 'react-icons/md';
 import { RiStarLine } from 'react-icons/ri';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setSelectedEmail } from "../redux/appSlice";
 
-export const Mail = () => {
+export const Mail = ({email}) => {
   const navigate = useNavigate();
+  const dispatch=useDispatch();
 
   const openMail = () => {
-    navigate('/mail/178687687');
+    navigate(`/mail/${email.id}`);
+    dispatch(setSelectedEmail(email));
   };
 
   return (
@@ -21,10 +25,10 @@ export const Mail = () => {
         </div>
       </div>
       <div className='flex-1 ml-4'>
-        <p className='text-gray-600 truncate inline-block max-w-full'>Lorem ipsum</p>
+        <p className='text-gray-600 truncate inline-block max-w-full'>{email?.message}</p>
       </div>
       <div className='flex-none text-gray-400 text-sm'>
-        Time ayega
+        {new Date(email?.created?.seconds*1000).toUTCString()}
       </div>
     </div>
   );

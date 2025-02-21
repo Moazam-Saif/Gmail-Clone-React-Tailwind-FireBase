@@ -3,7 +3,7 @@ import { MdCropSquare, MdInbox } from 'react-icons/md';
 import { FaCaretDown, FaUserFriends } from 'react-icons/fa';
 import { IoMdRefresh, IoMdMore } from 'react-icons/io';
 import { GoTag } from 'react-icons/go';
-import { MailList } from './MailList';
+import { MailList } from './mailList';
 
 const mailType = [
   { icon: <MdInbox size={"20px"} />, text: "Primary" },

@@ -1,11 +1,21 @@
 
 import Avatar from "@mui/material/Avatar";
+import { useEffect, useState } from "react";
 import { CiCircleQuestion, CiSettings } from "react-icons/ci";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoIosSearch } from "react-icons/io";
 import { PiDotsNineBold } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import { setSearchInput } from "../redux/appSlice";
 
 export const Navbar=()=>{
+    const [input,setInput]=useState();
+    const dispatch=useDispatch();
+
+    useEffect(()=>{
+        dispatch(setSearchInput(input))
+    },[input]);
+
     return (
         <div className="flex items-center justify-between mx-3 h-16">
             <div className="flex items-center gap-10">
@@ -20,7 +30,7 @@ export const Navbar=()=>{
             <div className="md:block hidden w-[50%] mr-30">
                 <div className="flex items-center bg-[#EAF1FB] px-2 py-3 rounded-full">
                     <IoIosSearch size={"24px"} className="text-gray-700"/>
-                    <input type="text" className="rounded-full w-full bg-transparent outline-none px-1" placeholder="Search Mail"></input>
+                    <input type="text" onChange={(e)=>{setInput(e.target.value)}} value={input} className="rounded-full w-full bg-transparent outline-none px-1" placeholder="Search Mail"></input>
                 </div>
             </div>
             <div className="md:block hidden">

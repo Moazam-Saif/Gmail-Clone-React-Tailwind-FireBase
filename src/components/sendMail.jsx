@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOpen } from '../redux/appSlice';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export const SendMail = () => {
     const [formData,setFormData]=useState({to:"",subject:"",message:""})
@@ -11,9 +13,16 @@ export const SendMail = () => {
     const handleChange=(e)=>{
       setFormData(prevFormData=>({...prevFormData,[e.target.name]:e.target.value}))
     }
-    const handleSubmit=(e)=>{
+    const handleSubmit=async (e)=>{
       e.preventDefault();
-      console.log(formData);
+      await addDoc(collection(db, "emails"), {
+        to:formData.to,
+        subject:formData.subject,
+        message:formData.message,
+        created:serverTimestamp(),
+      });
+      dispatch(setOpen(false));
+      setFormData(prevFormData=>({...prevFormData,to:"",subject:"",message:""}))
     }
    
   return (
@@ -27,10 +36,10 @@ export const SendMail = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col p-3 gap-2">
-        <input type="text" onChange={handleChange} placeholder="To" name="to" className="outline-none py-1" />
-        <input type="text" onChange={handleChange} placeholder="Subject" name="subject" className="outline-none py-1" />
-        <textarea name="message" onChange={handleChange} cols="30" rows="10" className="outline-none py-1"></textarea>
-        <button type="submit" onClick={()=>{dispatch(setOpen(false))}} className="bg-[#0B57D0] rounded-full w-fit px-4 text-white font-medium">
+        <input type="text" onChange={handleChange} placeholder="To" name="to" className="outline-none py-1" value={formData.to} />
+        <input type="text" onChange={handleChange} placeholder="Subject" name="subject" className="outline-none py-1" value={formData.subject} />
+        <textarea name="message" onChange={handleChange} cols="30" rows="10" className="outline-none py-1" value={formData.message}></textarea>
+        <button type="submit" className="bg-[#0B57D0] rounded-full w-fit px-4 text-white font-medium">
           Send
         </button>
       </form>
